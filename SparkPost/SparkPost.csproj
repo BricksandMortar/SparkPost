@@ -54,8 +54,9 @@
     <Compile Include="Communication\Transport\SparkPostSmtp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Webhooks\" />
+    <None Include="Webhooks\SparkPost.ashx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
