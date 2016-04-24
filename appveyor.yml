@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: 1.0.0.{build}
 branches:
   except:
   - pages
@@ -15,16 +15,15 @@ environment:
   nuget_password: aHlingenDPOt
 install:
 - ps: >-
-    If ($env:APPVEYOR_REPO_BRANCH -eq "master"){
-
-    nuget sources add -Name "Rock Develop" -Source https://ci.appveyor.com/nuget/bricks-Rock-master
-
+    Write-Host $env:APPVEYOR_REPO_BRANCH;
+    If ($env:APPVEYOR_REPO_BRANCH -is "master"){
+    nuget sources add -Name "Rock Master" -Source https://ci.appveyor.com/nuget/bricks-Rock-master
+    Write-Host "Using Master";
     }
 
     Else{
-
     nuget sources add -Name "Rock Develop" -Source https://ci.appveyor.com/nuget/bricks-rock-develop
-
+    Write-Host "Using Develop";
     }
 before_build:
 - cmd: nuget restore C:\projects\SparkPost\SparkPost.sln
