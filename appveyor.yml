@@ -72,6 +72,7 @@ after_build:
     Invoke-Expression -Command:$command
 
     Get-ChildItem $path/*.plugin| % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+    Push-AppveyorArtifact $path\content\bin\com.bricksandmortarstudio.SparkPost.dll
 test: off
 artifacts:
 - path: '**\*.plugin'
@@ -87,6 +88,12 @@ deploy:
   draft: true
   prerelease: false
   force_update: true
+  on:
+    branch: master
+    APPVEYOR_REPO_TAG: true
+
+- provider: Environment
+  name: Hope
   on:
     branch: master
     APPVEYOR_REPO_TAG: true
