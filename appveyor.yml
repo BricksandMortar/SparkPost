@@ -70,10 +70,9 @@ after_build:
     Get-ChildItem $path/*.plugin| % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
 
     Push-AppveyorArtifact $env:APPVEYOR_BUILD_FOLDER\SparkPost\bin\Release\com.bricksandmortarstudio.SparkPost.dll -FileName 'com.bricksandmortarstudio.SparkPost.dll'
+
+    Push-AppveyorArtifact $env:APPVEYOR_BUILD_FOLDER\SparkPost\Webhooks\SparkPost.ashx -FileName 'SparkPost.ashx'
 test: off
-artifacts:
-- path: '**\*.plugin'
-  name: Plugin
 deploy:
 - provider: GitHub
   tag:
