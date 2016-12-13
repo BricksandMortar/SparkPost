@@ -15,6 +15,8 @@
 // </copyright>
 //
 
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Net.Mail;
@@ -34,7 +36,7 @@ namespace com.bricksandmortarstudio.Communication.Transport
     [Description("Sends a communication through SparkPost's SMTP API")]
     [Export(typeof(TransportComponent))]
     [ExportMetadata("ComponentName", "SparkPost SMTP")]
-    [TextField("Server", "", true, "smtp.sparkpostmail.com", "", 0)]
+    [TextField("Server", "", true, "smtp.sparkpostmail.com")]
     [TextField("Username", "Required to be SMTP_Injection", true, "SMTP_Injection", "", 1)]
     [TextField("Password", "A valid SparkPost API key", true, "", "", 2, null, true)]
     [IntegerField("Port", "", true, 587, "", 3)]
@@ -49,7 +51,10 @@ namespace com.bricksandmortarstudio.Communication.Transport
         /// <value>
         /// <c>true</c> if transport can track opens; otherwise, <c>false</c>.
         /// </value>
-        public override bool CanTrackOpens => true;
+        public override bool CanTrackOpens
+        {
+            get { return true; }
+        }
 
         /// <summary>
         /// Gets the recipient status note.
@@ -57,17 +62,25 @@ namespace com.bricksandmortarstudio.Communication.Transport
         /// <value>
         /// The status note.
         /// </value>
-        public override string StatusNote => $"Email was recieved for delivery by SparkPost ({RockDateTime.Now})";
+        public override string StatusNote
+        {
+            get { return string.Format("Email was recieved for delivery by SparkPost ({0})", RockDateTime.Now); }
+        }
 
         /// <summary>
         /// Adds any additional headers.
         /// </summary>
         /// <param name="message">The message.</param>
-        /// <param name="recipient"></param>
-        public override void AddAdditionalHeaders(MailMessage message, CommunicationRecipient recipient)
+        /// <param name="headers"></param>
+        public override void AddAdditionalHeaders(MailMessage message, Dictionary<string, string> headers )
         {
             var header = new JObject(new JProperty("options", new JObject(new JProperty("open_tracking", true), new JProperty("click_tracking", true),new JProperty("inline_css", GetAttributeValue("inlinecss").AsBoolean()))));
-            header.Add(new JProperty("metadata", new JObject(new JProperty("communication_recipient_guid", recipient.Guid.ToString()))));
+            var uniqueArgs = new JObject();
+            foreach ( var item in headers )
+            {
+                uniqueArgs.Add( item.Key, item.Value );
+            }
+            header.Add(new JProperty("metadata", uniqueArgs));
             string value = header.ToString();
             message.Headers.Add("X-MSYS-API", value);
         }
