@@ -189,7 +189,7 @@ public class SparkPost : IHttpHandler
                                                 .Truncate( MAX_LENGTH );
                                         communicationRecipient.Activities.Add( clickActivity );
                                         break;
-                                             case EventType.SpamComplaint:
+                                    case EventType.SpamComplaint:
                                     case EventType.GenerationFailure:
                                     case EventType.GenerationRejection:
                                     case EventType.Bounce:
@@ -207,7 +207,36 @@ public class SparkPost : IHttpHandler
                                             UnixTimeStampToDateTime(
                                                 eventItem["timestamp"].ToString() ) );
                                         break;
-                                   
+
+                                    case EventType.Injection:
+                                            var sentActivity =
+                                            new CommunicationRecipientActivity();
+                                        sentActivity.ActivityType = "Sent";
+                                        sentActivity.ActivityDateTime = UnixTimeStampToDateTime(
+                                            eventItem["timestamp"].ToString() );
+                                        sentActivity.ActivityDetail =
+                                            string.Format( "Emai sent to {0}",
+                                                eventItem["rcpt_to"]).Truncate( MAX_LENGTH );
+                                        communicationRecipient.Activities.Add( sentActivity );
+                                        break;
+                                    case EventType.SMSStatus:
+                                        break;
+                                    case EventType.Delay:
+                                        break;
+                                    case EventType.ListUnsubscribe:
+                                        break;
+                                    case EventType.LinkUnsubscribe:
+                                        break;
+                                    case EventType.RelayInjection:
+                                        break;
+                                    case EventType.RelayRejection:
+                                        break;
+                                    case EventType.RelayDelivery:
+                                        break;
+                                    case EventType.RelayTemporaryFailure:
+                                        break;
+                                    case EventType.RelayPermanentFailure:
+                                        break;
                                     default:
                                         throw new ArgumentOutOfRangeException();
                                 }
