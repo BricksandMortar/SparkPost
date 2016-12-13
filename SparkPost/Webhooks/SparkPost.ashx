@@ -190,6 +190,9 @@ public class SparkPost : IHttpHandler
                                         communicationRecipient.Activities.Add( clickActivity );
                                         break;
                                     case EventType.SpamComplaint:
+                                        communicationRecipient.Status = CommunicationRecipientStatus.Failed;
+                                        communicationRecipient.StatusNote = String.Format( "Reported to {0} as spam by {1}", eventItem["report_to"], eventItem["reason"] );
+                                        break;
                                     case EventType.GenerationFailure:
                                     case EventType.GenerationRejection:
                                     case EventType.Bounce:
