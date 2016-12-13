@@ -215,8 +215,8 @@ public class SparkPost : IHttpHandler
                                         break;
 
                                     case EventType.Injection:
-                                            var sentActivity =
-                                            new CommunicationRecipientActivity();
+                                        var sentActivity =
+                                        new CommunicationRecipientActivity();
                                         sentActivity.ActivityType = "Sent";
                                         sentActivity.ActivityDateTime = UnixTimeStampToDateTime(
                                             eventItem["timestamp"].ToString() );
