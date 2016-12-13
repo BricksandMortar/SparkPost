@@ -215,8 +215,8 @@ public class SparkPost : IHttpHandler
                                         sentActivity.ActivityDateTime = UnixTimeStampToDateTime(
                                             eventItem["timestamp"].ToString() );
                                         sentActivity.ActivityDetail =
-                                            string.Format( "Emai sent to {0}",
-                                                eventItem["rcpt_to"]).Truncate( MAX_LENGTH );
+                                            string.Format( "Email sent to {0}",
+                                                eventItem["rcpt_to"] ).Truncate( MAX_LENGTH );
                                         communicationRecipient.Activities.Add( sentActivity );
                                         break;
                                     case EventType.SMSStatus:
