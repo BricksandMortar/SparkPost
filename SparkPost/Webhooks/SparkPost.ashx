@@ -162,18 +162,6 @@ public class SparkPost : IHttpHandler
                                             };
                                         communicationRecipient.Activities.Add( openActivity );
                                         break;
-
-                                    case EventType.OutofBand:
-                                    case EventType.PolicyRejection:
-                                        communicationRecipient.Status = CommunicationRecipientStatus.Failed;
-                                        communicationRecipient.StatusNote =
-                                            eventItem["error_code"].ToString() +
-                                            eventItem["reason"] +
-                                            ( eventType == EventType.OutofBand
-                                                ? eventItem["bounce_class"]
-                                                : null );
-                                        break;
-
                                     case EventType.Click:
                                         var clickActivity =
                                             new CommunicationRecipientActivity();
@@ -195,6 +183,21 @@ public class SparkPost : IHttpHandler
                                         break;
                                     case EventType.GenerationFailure:
                                     case EventType.GenerationRejection:
+                                         communicationRecipient.Status = CommunicationRecipientStatus.Cancelled;
+                                        communicationRecipient.StatusNote =
+                                            eventItem["error_code"].ToString() +
+                                            eventItem["reason"] +
+                                            ( eventType != EventType.GenerationFailure
+                                                ? eventItem["bounce_class"]
+                                                : null );
+                                        break;
+                                    case EventType.OutofBand:
+                                    case EventType.PolicyRejection:
+                                        communicationRecipient.Status = CommunicationRecipientStatus.Failed;
+                                        communicationRecipient.StatusNote =
+                                            eventItem["error_code"].ToString() +
+                                            eventItem["reason"] + eventItem["bounce_class"];
+                                        break;
                                     case EventType.Bounce:
                                         string message =
                                             ( eventItem["error_code"].ToString() +
