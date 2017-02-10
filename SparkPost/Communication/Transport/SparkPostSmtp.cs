@@ -74,15 +74,18 @@ namespace com.bricksandmortarstudio.Communication.Transport
         /// <param name="headers"></param>
         public override void AddAdditionalHeaders(MailMessage message, Dictionary<string, string> headers )
         {
-            var header = new JObject(new JProperty("options", new JObject(new JProperty("open_tracking", true), new JProperty("click_tracking", true),new JProperty("inline_css", GetAttributeValue("inlinecss").AsBoolean()))));
+            if (headers == null || message == null)
+            {
+                return;
+            }
+            var header = new JObject( new JProperty( "options", new JObject( new JProperty( "open_tracking", true ), new JProperty( "click_tracking", true ), new JProperty( "inline_css", GetAttributeValue( "inlinecss" ).AsBoolean() ) ) ) );
             var uniqueArgs = new JObject();
             foreach ( var item in headers )
             {
                 uniqueArgs.Add( item.Key, item.Value );
             }
-            header.Add(new JProperty("metadata", uniqueArgs));
-            string value = header.ToString();
-            message.Headers.Add("X-MSYS-API", value);
+            header.Add( new JProperty( "metadata", uniqueArgs ) );
+            message.Headers.Add( "X-MSYS-API", header.ToString() );
         }
     }
 }
