@@ -137,7 +137,7 @@ public class SparkPost : IHttpHandler
                                         communicationRecipient.StatusNote =
                                             string.Format( "Confirmed delivered by SparkPost at {0}",
                                                 UnixTimeStampToDateTime(
-                                                    eventItem["timestamp"].ToString() ) );
+                                                    eventItem["timestamp"].ToString() ) ).Truncate( MAX_LENGTH );
                                         break;
 
                                     case EventType.Open:
@@ -179,7 +179,7 @@ public class SparkPost : IHttpHandler
                                         break;
                                     case EventType.SpamComplaint:
                                         communicationRecipient.Status = CommunicationRecipientStatus.Failed;
-                                        communicationRecipient.StatusNote = String.Format( "Reported to {0} as spam by {1}", eventItem["report_to"], eventItem["reason"] );
+                                        communicationRecipient.StatusNote = String.Format( "Reported to {0} as spam by {1}", eventItem["report_to"], eventItem["reason"].Truncate( MAX_LENGTH ));
                                         break;
                                     case EventType.GenerationFailure:
                                     case EventType.GenerationRejection:
@@ -189,14 +189,14 @@ public class SparkPost : IHttpHandler
                                             eventItem["reason"] +
                                             ( eventType != EventType.GenerationFailure
                                                 ? eventItem["bounce_class"]
-                                                : null );
+                                                : null ).Truncate( MAX_LENGTH );
                                         break;
                                     case EventType.OutofBand:
                                     case EventType.PolicyRejection:
                                         communicationRecipient.Status = CommunicationRecipientStatus.Failed;
                                         communicationRecipient.StatusNote =
                                             eventItem["error_code"].ToString() +
-                                            eventItem["reason"] + eventItem["bounce_class"];
+                                            eventItem["reason"] + eventItem["bounce_class"].Truncate( MAX_LENGTH );
                                         break;
                                     case EventType.Bounce:
                                         string message =
