@@ -179,24 +179,24 @@ public class SparkPost : IHttpHandler
                                         break;
                                     case EventType.SpamComplaint:
                                         communicationRecipient.Status = CommunicationRecipientStatus.Failed;
-                                        communicationRecipient.StatusNote = String.Format( "Reported to {0} as spam by {1}", eventItem["report_to"], eventItem["reason"].Truncate( MAX_LENGTH ));
+                                        communicationRecipient.StatusNote = String.Format( "Reported to {0} as spam by {1}", eventItem["report_to"], eventItem["reason"]).Truncate( MAX_LENGTH );
                                         break;
                                     case EventType.GenerationFailure:
                                     case EventType.GenerationRejection:
                                          communicationRecipient.Status = CommunicationRecipientStatus.Cancelled;
                                         communicationRecipient.StatusNote =
-                                            eventItem["error_code"].ToString() +
+                                            (eventItem["error_code"].ToString() +
                                             eventItem["reason"] +
                                             ( eventType != EventType.GenerationFailure
                                                 ? eventItem["bounce_class"]
-                                                : null ).Truncate( MAX_LENGTH );
+                                                : null )).Truncate( MAX_LENGTH );
                                         break;
                                     case EventType.OutofBand:
                                     case EventType.PolicyRejection:
                                         communicationRecipient.Status = CommunicationRecipientStatus.Failed;
                                         communicationRecipient.StatusNote =
-                                            eventItem["error_code"].ToString() +
-                                            eventItem["reason"] + eventItem["bounce_class"].Truncate( MAX_LENGTH );
+                                            (eventItem["error_code"].ToString() +
+                                            eventItem["reason"] + eventItem["bounce_class"]).Truncate( MAX_LENGTH );
                                         break;
                                     case EventType.Bounce:
                                         string message =
