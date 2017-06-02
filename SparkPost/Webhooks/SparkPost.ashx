@@ -209,7 +209,7 @@ public class SparkPost : IHttpHandler
                                         Rock.Communication.Email.ProcessBounce(
                                             eventItem["rcpt_to"].ToString(),
                                             Rock.Communication.BounceType.HardBounce,
-                                            message,
+                                            message.Truncate( MAX_LENGTH ) ,
                                             UnixTimeStampToDateTime(
                                                 eventItem["timestamp"].ToString() ) );
                                         break;
